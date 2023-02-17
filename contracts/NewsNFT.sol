@@ -27,7 +27,7 @@ contract NewsNFT is ERC721, Ownable {
         _safeMint(to, tokenId);
         _setTokenURI(tokenId, ipfsImage);
 
-        tokenIdToNews[tokenId] = NewsDetails(ipfsImage, ipfsTitle, ipfsDescription, ipfsArticle);
+        tokenIdToNews[tokenId] = NewsDetails(msg.sender, block.timestamp, ipfsImage, ipfsTitle, ipfsDescription, ipfsArticle);
         newsIds.push(tokenId);
     }
 

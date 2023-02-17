@@ -13,13 +13,15 @@ contract News {
 
     mapping(uint => address) public _creators;
 
+    mapping(address => bool) public isAllowed;
+
     uint[] public newsIds;
 
     constructor() {
         owner = msg.sender;
     }
 
-    function createNews(string calldata ipfsImage, string calldata ipfsTitle, string calldata ipfsDescription, string calldata ipfsArticle) public onlyOwner {
+    function createNews(string calldata ipfsImage, string calldata ipfsTitle, string calldata ipfsDescription, string calldata ipfsArticle) public onlyAllowed {
         uint256 newsId = _newsId;
         ++_newsId;
 
@@ -35,7 +37,7 @@ contract News {
         return creator;
     }
     
-    function deleteNews(uint256 index) public onlyOwner {
+    function deleteNews(uint256 index) public onlyAllowed {
         uint newsId = newsIds[index];
 
         newsIds[index] = newsIds[newsIds.length - 1];
@@ -44,32 +46,32 @@ contract News {
         delete newsIdToNews[newsId];
     }
 
-    function editNews(uint index, string calldata ipfsImage, string calldata ipfsTitle, string calldata ipfsDescription, string calldata ipfsArticle) public onlyOwner {
+    function editNews(uint index, string calldata ipfsImage, string calldata ipfsTitle, string calldata ipfsDescription, string calldata ipfsArticle) public onlyAllowed {
         uint newsId = newsIds[index];
 
         newsIdToNews[newsId] = NewsDetails(msg.sender, block.timestamp, ipfsImage, ipfsTitle, ipfsDescription, ipfsArticle);
         newsIds.push(newsId);
     }
 
-    function editNewsImage(uint256 index, string calldata ipfsImage) public onlyOwner {
+    function editNewsImage(uint256 index, string calldata ipfsImage) public onlyAllowed {
         uint newsId = newsIds[index];
 
         newsIdToNews[newsId].ipfsImage = ipfsImage;
     }
 
-    function editNewsTitle(uint256 index, string calldata ipfsTitle) public onlyOwner {
+    function editNewsTitle(uint256 index, string calldata ipfsTitle) public onlyAllowed {
         uint newsId = newsIds[index];
 
         newsIdToNews[newsId].ipfsTitle = ipfsTitle;
     }
 
-    function editNewsDescription(uint256 index, string calldata ipfsDescription) public onlyOwner {
+    function editNewsDescription(uint256 index, string calldata ipfsDescription) public onlyAllowed {
         uint newsId = newsIds[index];
 
         newsIdToNews[newsId].ipfsDescription = ipfsDescription;
     }
 
-    function editNewsArticle(uint256 index, string calldata ipfsArticle) public onlyOwner {
+    function editNewsArticle(uint256 index, string calldata ipfsArticle) public onlyAllowed {
         uint newsId = newsIds[index];
         
         newsIdToNews[newsId].ipfsArticle = ipfsArticle;
@@ -77,6 +79,11 @@ contract News {
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function.");
+        _;
+    }
+
+    modifier onlyAllowed(){
+        require(isAllowed[msg.sender], "Only allowed address can call this function.");
         _;
     }
 
