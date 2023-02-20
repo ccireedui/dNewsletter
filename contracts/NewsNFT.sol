@@ -45,9 +45,6 @@ contract NewsNFT is ERC721, Ownable {
     function editNewsImage(uint256 index, string calldata ipfsImage) public onlyOwner {
         uint tokenId = newsIds[index];
 
-        newsIds[index] = newsIds[newsIds.length - 1];
-        newsIds.pop();
-        
         _setTokenURI(tokenId, ipfsImage);
         tokenIdToNews[tokenId].ipfsImage = ipfsImage;
     }
@@ -55,17 +52,11 @@ contract NewsNFT is ERC721, Ownable {
     function editNewsTitle(uint256 index, string calldata ipfsTitle) public onlyOwner {
         uint tokenId = newsIds[index];
 
-        newsIds[index] = newsIds[newsIds.length - 1];
-        newsIds.pop();
-
         tokenIdToNews[tokenId].ipfsTitle = ipfsTitle;
     }
 
     function editNewsDescription(uint256 index, string calldata ipfsDescription) public onlyOwner {
         uint tokenId = newsIds[index];
-
-        newsIds[index] = newsIds[newsIds.length - 1];
-        newsIds.pop();
 
         tokenIdToNews[tokenId].ipfsDescription = ipfsDescription;
     }
@@ -73,9 +64,6 @@ contract NewsNFT is ERC721, Ownable {
     function editNewsArticle(uint256 index, string calldata ipfsArticle) public onlyOwner {
         uint tokenId = newsIds[index];
 
-        newsIds[index] = newsIds[newsIds.length - 1];
-        newsIds.pop();
-        
         tokenIdToNews[tokenId].ipfsArticle = ipfsArticle;
     }
 

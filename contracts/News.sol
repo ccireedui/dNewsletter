@@ -77,6 +77,24 @@ contract News {
         newsIdToNews[newsId].ipfsArticle = ipfsArticle;
     }
 
+    function getNews(uint index) public view returns (NewsDetails memory) {
+        uint newsId = newsIds[index];
+
+        return newsIdToNews[newsId];
+    }
+
+    function setAllowedAddress(address _address, bool status) public onlyOwner {
+        isAllowed[_address] = status;
+    }
+
+    function disallowAddress(address _address) public onlyOwner {
+        isAllowed[_address] = false;
+    }
+    
+    function allowAddress(address _address) public onlyOwner {
+        isAllowed[_address] = true;
+    }
+
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function.");
         _;
